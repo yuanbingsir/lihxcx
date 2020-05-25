@@ -1,0 +1,109 @@
+<!--pages/details/details.wxml-->
+<!-- 顶部导航栏 -->
+<view style="height:80rpx;background-color:#0E152E;display:flex;line-height:80rpx;color:#EBEBEF;">
+	<view style="flex:1;text-align:center;" class="{{num==1?'Highlight':''}}" bindtap="conversion1">详细信息</view>
+	<view style="flex:1;text-align:center;" class="{{num==2?'Highlight':''}}" bindtap="conversion2">历史记录</view>
+	<view style="flex:1;text-align:center;" class="{{num==3?'Highlight':''}}" bindtap="conversion3">视频监控</view>
+</view>
+<view class="wx-popup" hidden="{{flag}}">
+	<view class='popup-container'>
+		<view class="wx-popup-title">手动采集</view>
+		<view class="wx-popup-con">
+			<view>设备名称：{{list.equipmentName}}</view>
+			<view>设备编号：{{list.equipmentNumber}}</view>
+		</view>
+		<view class="wx-popup-btn">
+			<text class="btn-no" bindtap='_error'>取消</text>
+			<text class="btn-ok" bindtap='_success'>确定</text>
+		</view>
+	</view>
+</view>
+<!-- 详细信息 -->
+<view wx-if="{{num==1}}">
+	<map id="map" style="width: 100%; height: 500rpx;" longitude="{{latitude}}" latitude="{{longitude}}" markers="{{markers}}" data-markers="{{markers}}">
+	</map>
+	<view class="detailss">
+		<view style="display:flex">
+			<image src="{{list.equipmentStatus==1 ? '../imgs/zq.png':'../imgs/jzsr.png'}}" style="height:50rpx;width:50rpx;"></image>
+			<view style="{{list.equipmentStatus==1 ? 'color:green;height:60rpx;line-height:60rpx;font-size:42rpx;':'color:#ccc;height:60rpx;line-height:60rpx;font-size:42rpx;'}}">{{list.equipmentName}}</view>
+			<button size="mini" style="color:#fff;background-color:#56A9FF;font-size:30rpx;" bindtap="Manual">手动采集</button>
+			<button size="mini" style="color:#fff;background-color:#56A9FF;font-size:30rpx;" bindtap="fresh">刷新</button>
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			编号：{{list.equipmentNumber}}
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			硫化氢浓度：{{list.h2s}}
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			压力：{{list.pressure}}
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			温度：{{list.tempa}}/{{list.tempb}}
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			RSSI：{{list.rssi}}
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			GPS：{{list.latitude}},{{list.longitude}}
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			数据更新时间：{{list.updateTime}}
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			定时采集：{{list.clocking}}
+		</view>
+
+		<view style="margin-top:20rpx;font-size:25rpx">
+			校正系数：{{list.equipmentA}}/{{list.equipmentB}}
+		</view>
+		<view style="margin-top:20rpx;font-size:25rpx">
+			计时采集：{{list.timeLag}}
+		</view>
+	</view>
+</view>
+<!-- 历史记录 -->
+<view wx-if="{{num==2}}">
+	<view style="display:flex;">
+		<view style="background-color:#16436C;height:85rpx;">
+			<view class="page">
+				<!-- 时间段 -->
+				<view class="picker_group">
+					<picker mode="date" value="{{date}}" end="{{date2}}" bindchange="bindDateChange">
+						<view class="picker">
+							{{date}}
+						</view>
+					</picker>
+					至
+					<picker mode="date" value="{{date2}}" start="{{date}}" end="2050-01-01" bindchange="bindDateChange2">
+						<view class="picker">
+							{{date2}}
+						</view>
+					</picker>
+				</view>
+			</view>
+		</view>
+	</view>
+	<view class="container">
+		<ec-canvas id="mychart" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+	</view>
+	<view style="background-color:#1F2642;margin:30rpx;padding:20rpx;">
+		<view style="height:60rpx;line-height:60rpx;background-color:#19466D;color:#fff;display:flex;">
+			<view style="flex:1;text-align:center;">压力</view>
+			<view style="flex:1;text-align:center;">硫化氢</view>
+			<view style="flex:2;text-align:center;">数据更新时间</view>
+		</view>
+		<block wx:for="{{histlist}}" wx:key="id">
+			<view style="display:flex;color:#fff;margin-top:10rpx;" class="{{index %2 == 1?'categ':'categ1'}}" data-index="{{index}}">
+				<view style="flex:1;text-align:center;">{{item.pressure}}</view>
+				<view style="flex:1;text-align:center;">{{item.h2s}}</view>
+				<view style="flex:2;text-align:center;">{{item.updateTime}}</view>
+			</view>
+		</block>
+	</view>
+</view>
+<!-- 视频监控 -->
+<view wx-if="{{num==3}}">
+	<view style="color:#fff;text-align:center;font-size:40rpx;" wx-if="{{!flax}}">该设备暂无摄像头</view>
+	<video style="width:100%" src="http://hls01open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b.hd.m3u8" wx-if="{{flax}}"></video>
+</view>

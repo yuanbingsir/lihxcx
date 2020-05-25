@@ -1,0 +1,42 @@
+{
+  "pages":[
+    "pages/home/home",
+    "pages/index/index",
+    "pages/tabOne/tabOne",
+    "pages/tabTwo/tabTwo",
+    "pages/details/details",
+    "pages/line/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#202743",
+    "navigationBarTextStyle":"white",
+    "navigationBarTitleText": "硫化氢监测"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "backgroundColor":"#303048",
+    "selectedColor": "#11cd6e",
+    "color": "#FFF",
+    "borderStyle": "white",
+    "list": [{
+      "pagePath": "pages/home/home",
+      "text": "首页",
+      "iconPath":"./pages/imgs/sy1.png",
+      "selectedIconPath":"./pages/imgs/sy.png"
+    },
+    {
+      "pagePath": "pages/tabOne/tabOne",
+      "text": "通知",
+      "iconPath":"./pages/imgs/tz.png",
+      "selectedIconPath":"./pages/imgs/tz1.png"
+    },
+    {
+      "pagePath": "pages/tabTwo/tabTwo",
+      "text": "我的",
+      "iconPath":"./pages/imgs/wd1.png",
+      "selectedIconPath":"./pages/imgs/wd.png"
+    }]
+  }
+}

@@ -1,0 +1,6 @@
+/* pages/tabOne/tabOne.wxss */
+.h1{
+  color: #fff;
+  font-size: 100rpx;
+  text-align: center;
+}

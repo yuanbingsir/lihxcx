@@ -1,0 +1,23 @@
+/**index.wxss**/
+.input{
+  height: 70rpx;
+  border-bottom: 1px solid #fff;
+  margin-top: 20rpx;
+  color: #fff;
+  padding-left: 100rpx;
+}
+.img1{
+  height: 50rpx;
+  width: 50rpx;
+  position: absolute;
+}
+.but{
+  height: 80rpx;
+  background-color: #0E92D0;
+  color: #fff;
+  width: 500rpx;
+  text-align: center;
+  line-height: 80rpx;
+  margin-top: 60rpx;
+  margin-left: 120rpx;
+}

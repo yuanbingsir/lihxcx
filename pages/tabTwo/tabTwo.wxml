@@ -1,0 +1,24 @@
+<!--pages/tabTwo/tabTwo.wxml-->
+<view class="yonghu">
+  <image src="../imgs/wd1.png" class="img1"></image>
+</view>
+
+<view class="yonghu1">
+  <image src="../imgs/mm.png" class="passimg"></image>
+  <text class="text1">修改密码</text>
+</view>
+
+<view class="yonghu2">
+  <image src="../imgs/yj.png" class="passimg"></image>
+  <text class="text1">意见反馈</text>
+</view>
+
+<view class="yonghu2">
+  <image src="../imgs/gr.png" class="passimg"></image>
+  <text class="text1">个人资料</text>
+</view>
+
+<view class="yonghu1">
+  <image src="../imgs/tc.png" class="passimg"></image>
+  <text class="text1">退出登录</text>
+</view>

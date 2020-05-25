@@ -1,0 +1,14 @@
+<!--index.wxml-->
+<view style="margin-top:50rpx;padding: 0 50rpx;position: relative;">
+	<image src="../imgs/zh.png" class="img1"></image>
+	<input class="input" placeholder="请输入账号" ></input>
+</view>
+
+<view style="margin-top:50rpx;padding: 0 50rpx;position: relative;">
+<image src="../imgs/mm.png" class="img1"></image>
+	<input class="input" type="password" placeholder="请输入密码"></input>
+</view>
+
+<view class="but" >
+  登录
+</view>

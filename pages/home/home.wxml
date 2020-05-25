@@ -1,0 +1,67 @@
+<view style="margin-top:20rpx;padding:0 20rpx;display:flex;">
+	<view class='select_box'>
+		<view class='select' catchtap='selectTap'>
+			<text class='select_text'>{{selectData[index]}}</text>
+			<image class='select_img {{show&&"select_img_rotate"}}' src='../imgs/xl.png'></image>
+		</view>
+		<view class='option_box' style='height:{{show?(selectData.length>5?540:selectData.length*60):0}}rpx;'>
+			<text class='option' style='{{index==selectData.length-1&&"border:0;"}}' wx:for='{{selectData}}' wx:key='this' data-index='{{index}}' catchtap='optionTap'>{{item}}</text>
+		</view>
+	</view>
+
+	<view style="display:flex;margin-left:20rpx;">
+		<image src="../imgs/fdj.png" style="width:50rpx;height:50rpx;position: absolute;top:30rpx;"></image>
+		<input class="ipt" bindinput="myChange11"></input>
+	</view>
+
+	<view>
+		<image src="../imgs/caidan.png" style="width:70rpx;height:70rpx;margin-left:20rpx;"></image>
+	</view>
+</view>
+<!-- <view style="color:#fff;text-align:center;" wx:if="{{falx}}">正在刷新</view> -->
+<scroll-view scroll-y style="position: absolute;z-index:1;height:100%" bindtouchstart='touchStart'
+  bindtouchend='touchEnd'
+  bindtouchmove='touchMove'>
+	<view wx:if="{{showRefresh}}" style='width:100%;position:relative;padding:60rpx 0;color:#fff;'>
+    <view class="text-gray" style='position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);'>
+      <view wx:if="{{freshStatus == 'fresh'}}" class="flex">
+        <view class="lzy-loading"></view>
+        <view>刷新中...</view>
+      </view>
+      <view class="text" wx:elif="{{freshStatus == 'more'}}">
+        <!-- 使用到了 colorUI 下拉箭头图标 -->
+        <text class="cuIcon-refresharrow"></text> 继续下拉刷新
+      </view>
+      <view class="text" wx:else>
+        正在刷新
+      </view>
+    </view>
+  </view>
+	<block wx:for="{{list1}}" wx:key="id">
+		<view class="blclist"  data-location="{{item.equipmentNumber}}" bindtap="xiangqing">
+			<view style="display:flex">
+				<image src="{{item.state ? '../imgs/zq.png':'../imgs/jzsr.png'}}" style="height:50rpx;width:50rpx;"></image>
+				<view style="{{item.state ? 'color:green;height:60rpx;line-height:60rpx;font-size:42rpx;':'color:#ccc;height:60rpx;line-height:60rpx;font-size:42rpx;'}}">{{item.equipmentName}}</view>
+			</view>
+			<view style="display:flex;font-size:25rpx;margin-top:20rpx;">
+				<view style="margin-right:60rpx;">
+					设备编号：{{item.equipmentNumber}}
+				</view>
+				<view>
+					压力：{{item.pressure}}
+				</view>
+			</view>
+			<view style="display:flex;font-size:25rpx;margin-top:20rpx;">
+				<view style="margin-right:200rpx;">
+					硫化氢浓度：{{item.h2s}}
+				</view>
+				<view>
+					温度：{{item.tempA}}/{{item.tempB}}
+				</view>
+			</view>
+      <view style="margin-top:20rpx;font-size:25rpx">
+      数据更新时间：{{item.updateTime}}
+      </view>
+		</view>
+	</block>
+</scroll-view>
