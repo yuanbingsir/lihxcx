@@ -16,8 +16,10 @@ Page({
     date2: '',//默认结束时间 
     histlist: [],
     time: [],
+    tooker: '',
     flag: true,
-    index:0,
+    index: 0,
+    url: '',
     ec: {
       lazyLoad: true
     },
@@ -26,21 +28,36 @@ Page({
     //data中配置
   },
   bindDateChange(e) {
-    let that = this;
-    console.log(e.detail.value)
-    that.setData({
+    // console.log(e.detail.value)
+    this.setData({
       date: e.detail.value,
     })
+    this.hphist()
   },
   bindDateChange2(e) {
-    let that = this;
-    that.setData({
+    this.setData({
       date2: e.detail.value,
     })
     this.hphist()
   },
-  fresh(){
-    this._success()
+  bindDateChange3(){
+    console.log(1);
+    
+  },
+  fresh() {
+    wx.request({
+      url: app.globalData.request_url + '/osdDeviceController/queryOsdDeviceByNumber?equipmentNumber=' + this.data.list.equipmentNumber,
+      method: 'GET',
+      success: (res) => {
+        this.setData({
+          list: res.data.data,
+        })
+        wx.showToast({
+          title: '成功',
+          duration: 2000
+        })
+      }
+    })
   },
   conversion1() {
     this.setData({
@@ -65,13 +82,17 @@ Page({
         this.setData({
           flag: true
         })
+        wx.showToast({
+          title: '成功',
+          duration: 2000
+        })
       })
     })
 
   },
   hphist() {
     wx.request({
-      url: app.globalData.request_url + 'osdDeviceHistoryController/queryOsdDeviceHistory?equipmentNumber=' + this.data.list.equipmentNumber + '&updateStart=' + this.data.date + '&updateDown=' + this.data.date2,
+      url: app.globalData.request_url + 'osdDeviceHistoryController/queryOsdDeviceHistory?equipmentNumber=' + this.data.list.equipmentNumber + '&updateStart=' + this.data.date + '&updateDown=' + this.data.date2+'23:59:59',
       method: 'GET',
       success: (res) => {
         this.setData({
@@ -101,24 +122,53 @@ Page({
   },
   conversion3() {
     this.setData({
-      num: 3
+      num: 3,
     })
   },
   gettookin() {
     wx.request({
       url: 'https://open.ys7.com/api/lapp/token/get',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       method: 'POST',
       data: {
-        'appKey': "d1d839e1eee04b63908b1807a5bdba1a",
-        'appSecret': "f863ca7459997202bfa7b4083dc2b1d5"
+        appKey: "d1d839e1eee04b63908b1807a5bdba1a",
+        'appSecret': "11b435ed63f8e5d47ead170a480c4d33"
       },
       success: (res) => {
-
+        wx.setStorage({
+          data: res.data.data.accessToken,
+          key: 'token',
+        })
+      }
+    })
+  },
+  getli() {
+    wx.request({
+      url: 'https://open.ys7.com/api/lapp/live/address/limited',
+      method: 'POST',
+      data: {
+        accessToken: wx.getStorageSync('token'),
+        deviceSerial: this.data.list.serial,
+        channelNo: 1
+      },
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      success: (res) => {
+        this.setData({
+          url: res.data.data.liveAddress
+        })
+        console.log(res);
       }
     })
   },
   onLoad: function (options) {
-    this.gettookin()
+    if (!wx.getStorageSync('token')) {
+      this.gettookin()
+    } else {
+    }
     let data1 = options.data1;
     wx.request({
       url: app.globalData.request_url + '/osdDeviceController/queryOsdDeviceByNumber?equipmentNumber=' + data1,
@@ -129,9 +179,12 @@ Page({
             flax: false
           })
         } else {
-
+          var tooker = wx.getStorageSync('token')
+          this.setData({
+            url: 'http://hls01open.ys7.com/' + res.data.data.serial + '/1.hd.live&autoplay=1&accessToken=' + tooker + '&begin=20200421&end=20200421'
+          })
         }
-        console.log(res.data.data);
+        // console.log(res.data.data);
 
         var timestamp = Date.parse(new Date());
         var date = new Date(timestamp);
@@ -143,7 +196,7 @@ Page({
         var D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
         var E = D - 7
         var data4 = Y + '-' + M + '-' + D
-        var data5 = Y + '-' + M + '-' + E
+        var data5 = Y + '-' + M + '-' + E 
         this.setData({
           list: res.data.data,
 
@@ -156,6 +209,10 @@ Page({
             latitude: res.data.data.longitude,
           }]
         })
+        if (this.data.list.serial != null) {
+          this.getli()
+        }
+
       }
     })
   },
@@ -173,19 +230,38 @@ Page({
 
   },
   getOption: function () {
+    var liulist = []
+    for (var i = 0; i < this.data.histlist.length; i++) {
+      liulist.push({ value: [this.data.histlist[i].updateTime, this.data.histlist[i].h2s] })
+    }
+    
     var that = this
     // 前台配置折线线条表示属性
     // 使用for in 遍历对象拿出name,并配置icon和textStyle，最后放入新建的legendList数组中
     var option = {
       // 折线图线条的颜色
+      dataZoom: [{
+        type: 'slider',
+        show: true, // flase直接隐藏图形
+        xAxisIndex: [0],
+
+        bottom: -5,
+        start: 70, // 滚动条的起始位置
+        end: 100 // 滚动条的截止位置（按比例分割你的柱状图x轴长度）
+      },
+      {
+        type: 'inside'
+      }
+      ],
       xAxis: {
-        type: 'category',
-        data: that.data.time.reverse(),
+        type: 'time',
         axisLabel: {
           textStyle: {
             color: '#ffffff'
           }
-        }
+        },
+
+        // splitNumber:12
       },
       yAxis: {
         type: 'value',
@@ -196,10 +272,18 @@ Page({
         }
       },
       series: [{
-        data: that.data.h2s.reverse(),
-        type: 'line',
-        smooth: true
-      }]
+        data: liulist,
+        type: 'line'
+      }],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          },
+        },
+      },
     }
     return option
   },

@@ -142,6 +142,11 @@ Page({
       url: app.globalData.request_url + 'osdDeviceController/queryOsdDevice',
       method: 'GET',
       success: (res) => {
+        res.data.data.forEach(item=>{
+          if(item.equipmentName==null){
+            item.equipmentName = ''
+          }
+        })
         this.setData({
           list: res.data.data
         })

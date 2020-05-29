@@ -20,7 +20,7 @@
 </view>
 <!-- 详细信息 -->
 <view wx-if="{{num==1}}">
-	<map id="map" style="width: 100%; height: 500rpx;" longitude="{{latitude}}" latitude="{{longitude}}" markers="{{markers}}" data-markers="{{markers}}">
+	<map id="map" style="width: 100%; height: 500rpx;" longitude="{{latitude}}" latitude="{{longitude}}" markers="{{markers}}" data-markers="{{markers}}" scale="10">
 	</map>
 	<view class="detailss">
 		<view style="display:flex">
@@ -33,13 +33,13 @@
 			编号：{{list.equipmentNumber}}
 		</view>
 		<view style="margin-top:20rpx;font-size:25rpx">
-			硫化氢浓度：{{list.h2s}}
+			硫化氢浓度：{{list.h2s}}PPM
 		</view>
 		<view style="margin-top:20rpx;font-size:25rpx">
-			压力：{{list.pressure}}
+			压力：{{list.pressure}}MPa
 		</view>
 		<view style="margin-top:20rpx;font-size:25rpx">
-			温度：{{list.tempa}}/{{list.tempb}}
+			温度：{{list.tempa}}℃/{{list.tempb}}℃
 		</view>
 		<view style="margin-top:20rpx;font-size:25rpx">
 			RSSI：{{list.rssi}}
@@ -75,7 +75,7 @@
 						</view>
 					</picker>
 					至
-					<picker mode="date" value="{{date2}}" start="{{date}}" end="2050-01-01" bindchange="bindDateChange2">
+					<picker mode="date" value="{{date2}}" start="{{date}}" end="2050-01-01" bindchange="bindDateChange2" >
 						<view class="picker">
 							{{date2}}
 						</view>
@@ -87,7 +87,7 @@
 	<view class="container">
 		<ec-canvas id="mychart" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
 	</view>
-	<view style="background-color:#1F2642;margin:30rpx;padding:20rpx;">
+	<view style="background-color:#1F2642;margin:30rpx;padding:15rpx;">
 		<view style="height:60rpx;line-height:60rpx;background-color:#19466D;color:#fff;display:flex;">
 			<view style="flex:1;text-align:center;">压力</view>
 			<view style="flex:1;text-align:center;">硫化氢</view>
@@ -105,5 +105,5 @@
 <!-- 视频监控 -->
 <view wx-if="{{num==3}}">
 	<view style="color:#fff;text-align:center;font-size:40rpx;" wx-if="{{!flax}}">该设备暂无摄像头</view>
-	<video style="width:100%" src="http://hls01open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b.hd.m3u8" wx-if="{{flax}}"></video>
+	<video style="width:100%;height:500rpx;" src="{{url}}" wx-if="{{flax}}" autoplay="true"></video>
 </view>
